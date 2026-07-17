@@ -41,20 +41,22 @@ use crate::state::Fundraiser;
         ),
         vault(mut, ata = [fundraiser, mint_to_raise]),
         maker_ata(mut, ata = [maker, mint_to_raise]),
-        system_program,
-        token_program
     ],
     data = [
         bump: u8 = data[0]
     ]
 )]
-pub fn process_checker_instruction(
-    accounts: &mut [AccountView],
-    data: &[u8],
-) -> ProgramResult {
+pub fn process_checker_instruction(accounts: &mut [AccountView], data: &[u8]) -> ProgramResult {
     // All account bindings must appear before any other statements.
-    let [maker, mint_to_raise, fundraiser, vault, maker_ata, _system_program, _token_program] =
-        accounts
+    let [
+        maker,
+        mint_to_raise,
+        fundraiser,
+        vault,
+        maker_ata,
+        _system_program,
+        _token_program,
+    ] = accounts
     else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };

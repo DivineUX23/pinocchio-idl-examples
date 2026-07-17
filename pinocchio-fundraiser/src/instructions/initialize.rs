@@ -4,8 +4,8 @@ use pinocchio::{
     error::ProgramError,
     sysvars::{Sysvar, rent::Rent},
 };
-use pinocchio_system::instructions::CreateAccount;
 use pinocchio_idl_macros::p_instruction;
+use pinocchio_system::instructions::CreateAccount;
 
 use crate::{MIN_AMOUNT_TO_RAISE, state::Fundraiser};
 
@@ -40,10 +40,7 @@ use crate::{MIN_AMOUNT_TO_RAISE, state::Fundraiser};
             state = Fundraiser
         ),
         mint_to_raise(relations = [fundraiser]),
-        vault(mut, init = [fundraiser, mint_to_raise]),
-        system_program,
-        token_program,
-        associated_token_program
+        vault(mut, init = [fundraiser, mint_to_raise])
     ],
     data = [
         amount_to_raise: u64 = data[0..8],
@@ -52,13 +49,17 @@ use crate::{MIN_AMOUNT_TO_RAISE, state::Fundraiser};
         bump:            u8  = data[17]
     ]
 )]
-pub fn process_initialize_instruction(
-    accounts: &mut [AccountView],
-    data: &[u8],
-) -> ProgramResult {
+pub fn process_initialize_instruction(accounts: &mut [AccountView], data: &[u8]) -> ProgramResult {
     // All account bindings must appear before any other statements.
-    let [maker, mint_to_raise, fundraiser, vault, system_program, token_program, _associated_token_program] =
-        accounts
+    let [
+        maker,
+        mint_to_raise,
+        fundraiser,
+        vault,
+        system_program,
+        token_program,
+        _associated_token_program,
+    ] = accounts
     else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };

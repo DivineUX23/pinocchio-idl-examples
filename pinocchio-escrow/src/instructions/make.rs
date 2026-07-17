@@ -4,8 +4,8 @@ use pinocchio::{
     error::ProgramError,
     sysvars::{Sysvar, rent::Rent},
 };
-use pinocchio_system::instructions::CreateAccount;
 use pinocchio_idl_macros::p_instruction;
+use pinocchio_system::instructions::CreateAccount;
 
 use crate::state::Escrow;
 
@@ -20,10 +20,7 @@ use crate::state::Escrow;
             state = Escrow
         ),
         vault(mut, init = [escrow, mint_a]),
-        maker_ata(mut, ata = [maker, mint_a]),
-        system_program,
-        token_program,
-        associated_token_program
+        maker_ata(mut, ata = [maker, mint_a])
     ],
     data = [
         seed:     u64 = data[0..8],
@@ -32,10 +29,7 @@ use crate::state::Escrow;
         bump:     u8  = data[24]
     ]
 )]
-pub fn process_make_instruction(
-    accounts: &mut [AccountView],
-    data: &[u8],
-) -> ProgramResult {
+pub fn process_make_instruction(accounts: &mut [AccountView], data: &[u8]) -> ProgramResult {
     // Extract ALL account bindings contiguously at the start of the function body.
     let [
         maker,
@@ -47,7 +41,8 @@ pub fn process_make_instruction(
         system_program,
         token_program,
         _associated_token_program,
-    ] = accounts else {
+    ] = accounts
+    else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };
 
@@ -93,13 +88,7 @@ pub fn process_make_instruction(
     }
     .invoke()?;
 
-    pinocchio_token::instructions::Transfer::new(
-        maker_ata,
-        vault,
-        maker,
-        amount_a
-    )
-    .invoke()?;
+    pinocchio_token::instructions::Transfer::new(maker_ata, vault, maker, amount_a).invoke()?;
 
     Ok(())
 }

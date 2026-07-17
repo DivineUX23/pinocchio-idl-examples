@@ -4,6 +4,7 @@
 Cargo.lock
 idl.json
 _expanded.rs
+expanded.rs
 epanded.rs
 **/target
 ../target

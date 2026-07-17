@@ -2,7 +2,7 @@
 
 Example Pinocchio programs annotated with [pinocchio-idl](https://github.com/DivineUX23/pinocchio-idl).
 
-Each subdirectory is a self-contained Cargo crate demonstrating real-world usage of the `#[p_instruction]`, `#[p_state]`, `#[p_constant]`, and `#[p_error]` proc-macro attributes, as well as the `pinocchio-idl build` CLI for IDL generation.
+Each subdirectory is a self-contained Cargo crate demonstrating real-world usage of the `#[p_instruction]`, `#[p_state]`, `#[p_constant]`, and `#[p_error]` proc-macro attributes, as well as the `pinocchio-idl generate` CLI for IDL generation.
 
 ---
 
@@ -12,6 +12,7 @@ Each subdirectory is a self-contained Cargo crate demonstrating real-world usage
 |---|---|
 | [`pinocchio-fundraiser`](pinocchio-fundraiser/) | A token fundraising program with initialize, contribute, checker, and refund instructions. Demonstrates PDA derivation with explicit bump seeds, ATA constraints, multi-instruction state management, and time-based logic. |
 | [`pinocchio-escrow`](pinocchio-escrow/) | A clean, minimalist token escrow program with make, take, and refund instructions. Demonstrates simple state initialization, exchange routing, and account closure. |
+| [`pinocchio-counter`](pinocchio-counter/) | A minimal counter program with initialize, increment, and decrement instructions. Demonstrates fundamental PDA state management and custom errors. |
 
 ---
 
@@ -31,7 +32,7 @@ cargo install --git https://github.com/DivineUX23/pinocchio-idl.git pinocchio-id
 From inside any example directory:
 
 ```bash
-pinocchio-idl build
+pinocchio-idl generate
 ```
 
 This produces `idl.json` in the current directory, compatible with both the Anchor IDL specification and [Codama](https://github.com/codama-idl/codama).
@@ -57,18 +58,29 @@ pinocchio-idl-examples/
 │           ├── contribute.rs
 │           ├── checker.rs
 │           └── refund.rs
-└── pinocchio-escrow/
+├── pinocchio-escrow/
+│   ├── Cargo.toml
+│   └── src/
+│       ├── lib.rs
+│       ├── constants.rs
+│       ├── error.rs
+│       ├── state/
+│       │   ├── mod.rs
+│       │   └── escrow.rs
+│       └── instructions/
+│           ├── mod.rs
+│           ├── make.rs
+│           ├── take.rs
+│           └── refund.rs
+└── pinocchio-counter/
     ├── Cargo.toml
     └── src/
         ├── lib.rs
-        ├── constants.rs
         ├── error.rs
-        ├── state/
-        │   ├── mod.rs
-        │   └── escrow.rs
+        ├── state.rs
         └── instructions/
             ├── mod.rs
-            ├── make.rs
-            ├── take.rs
-            └── refund.rs
+            ├── initialize.rs
+            ├── increment.rs
+            └── decrement.rs
 ```

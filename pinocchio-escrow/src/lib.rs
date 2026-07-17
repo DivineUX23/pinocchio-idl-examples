@@ -1,10 +1,7 @@
 #![allow(unexpected_cfgs)]
 
 use pinocchio::{
-    AccountView, Address, ProgramResult,
-    address::declare_id,
-    entrypoint,
-    error::ProgramError,
+    AccountView, Address, ProgramResult, address::declare_id, entrypoint, error::ProgramError,
 };
 
 mod constants;
@@ -16,7 +13,7 @@ use instructions::*;
 
 entrypoint!(process_instruction);
 
-declare_id!("Escrow1111111111111111111111111111111111111");
+declare_id!("FDYpkuY64WaazRCsReFHTc32VeQwBxyev5DfUqBhwySA");
 
 pub fn process_instruction(
     program_id: &Address,
@@ -30,8 +27,8 @@ pub fn process_instruction(
         .ok_or(ProgramError::InvalidAccountData)?;
 
     match EscrowInstruction::try_from(discriminator)? {
-        EscrowInstruction::Make   => process_make_instruction(accounts, data)?,
-        EscrowInstruction::Take   => process_take_instruction(accounts, data)?,
+        EscrowInstruction::Make => process_make_instruction(accounts, data)?,
+        EscrowInstruction::Take => process_take_instruction(accounts, data)?,
         EscrowInstruction::Refund => process_refund_instruction(accounts, data)?,
     }
 

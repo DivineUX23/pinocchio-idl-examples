@@ -37,7 +37,7 @@ To compile the program and generate the Anchor-compatible IDL, run:
 
 ```bash
 cargo build-sbf
-pinocchio-idl build
+pinocchio-idl generate
 ```
 
 This creates a structured `idl.json` in the root of the workspace.

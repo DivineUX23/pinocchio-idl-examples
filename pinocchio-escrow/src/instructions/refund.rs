@@ -1,7 +1,7 @@
 use pinocchio::{
+    AccountView, ProgramResult,
     cpi::{Seed, Signer},
     error::ProgramError,
-    AccountView, ProgramResult,
 };
 use pinocchio_idl_macros::p_instruction;
 
@@ -17,30 +17,39 @@ use crate::state::Escrow;
             state = Escrow
         ),
         vault(mut, ata = [escrow, mint_a]),
-        maker_ata(mut, ata = [maker, mint_a]),
-        token_program,
-        system_program
+        maker_ata(mut, ata = [maker, mint_a])
     ],
     data = [
         seed:     u64 = data[0..8],
-        bump:     u8  = data[8]
+        bump:     u8  = data[8],
+        amount_a: u64 = data[9..17]
     ]
 )]
 pub fn process_refund_instruction(accounts: &mut [AccountView], data: &[u8]) -> ProgramResult {
     // Extract ALL account bindings contiguously at the start of the function body.
-    let [maker, mint_a, escrow, vault, maker_ata, _token_program, _system_program] = accounts
+    let [
+        maker,
+        mint_a,
+        escrow,
+        vault,
+        maker_ata,
+        _token_program,
+        _system_program,
+    ] = accounts
     else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };
 
-    let escrow_data = Escrow::from_account_info(escrow)?;
-    if escrow_data.maker() != maker.address() {
-        return Err(ProgramError::InvalidAccountData);
+    {
+        let escrow_data = Escrow::from_account_info(escrow)?;
+        if escrow_data.maker() != maker.address() {
+            return Err(ProgramError::InvalidAccountData);
+        }
     }
 
     // Refund tokens from vault back to maker (signed by escrow PDA)
-    let seed_bytes = escrow_data.seed.to_le_bytes();
-    let bump_bytes = [escrow_data.bump];
+    let seed_bytes = seed.to_le_bytes();
+    let bump_bytes = [bump];
     let signer_seeds = [
         Seed::from(b"escrow"),
         Seed::from(maker.address().as_array()),
@@ -49,7 +58,7 @@ pub fn process_refund_instruction(accounts: &mut [AccountView], data: &[u8]) -> 
     ];
     let signer = Signer::from(&signer_seeds);
 
-    pinocchio_token::instructions::Transfer::new(vault, maker_ata, escrow, escrow_data.amount_a)
+    pinocchio_token::instructions::Transfer::new(vault, maker_ata, escrow, amount_a)
         .invoke_signed(&[signer])?;
 
     // Close the escrow account by reclaiming its rent lamports

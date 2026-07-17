@@ -6,7 +6,10 @@ use pinocchio::{
 };
 use pinocchio_idl_macros::p_instruction;
 
-use crate::{SECONDS_TO_DAYS, state::{Contributor, Fundraiser}};
+use crate::{
+    SECONDS_TO_DAYS,
+    state::{Contributor, Fundraiser},
+};
 
 /// Refunds a contributor's tokens after a campaign has expired without meeting its target.
 ///
@@ -50,19 +53,14 @@ use crate::{SECONDS_TO_DAYS, state::{Contributor, Fundraiser}};
             state = Contributor
         ),
         contributor_ata(mut, ata = [contributor, mint_to_raise]),
-        vault(mut, ata = [fundraiser, mint_to_raise]),
-        system_program,
-        token_program
+        vault(mut, ata = [fundraiser, mint_to_raise])
     ],
     data = [
         bump:             u8 = data[0],
         contributor_bump: u8 = data[1]
     ]
 )]
-pub fn process_refund_instruction(
-    accounts: &mut [AccountView],
-    data: &[u8],
-) -> ProgramResult {
+pub fn process_refund_instruction(accounts: &mut [AccountView], data: &[u8]) -> ProgramResult {
     // All account bindings must appear before any other statements.
     let [
         contributor,
@@ -124,13 +122,8 @@ pub fn process_refund_instruction(
     ];
     let signer = Signer::from(&signer_seeds);
 
-    pinocchio_token::instructions::Transfer::new(
-        vault,
-        contributor_ata,
-        fundraiser,
-        refund_amount,
-    )
-    .invoke_signed(&[signer])?;
+    pinocchio_token::instructions::Transfer::new(vault, contributor_ata, fundraiser, refund_amount)
+        .invoke_signed(&[signer])?;
 
     // Close the contributor account and return its lamports to the contributor.
     let contributor_lamports = contributor_account.lamports();
