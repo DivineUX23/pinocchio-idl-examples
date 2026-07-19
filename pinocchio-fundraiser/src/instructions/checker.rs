@@ -32,6 +32,7 @@ use crate::state::Fundraiser;
 /// | bump  | u8   | 0      |
 #[p_instruction(
     id = 2,
+    inject,
     accounts = [
         maker(mut, signer),
         mint_to_raise(relations = [fundraiser]),

@@ -40,6 +40,7 @@ use crate::{
 /// | bump   | u8   | 8      |
 #[p_instruction(
     id = 1,
+    inject,
     accounts = [
         contributor(signer, mut),
         mint_to_raise(relations = [fundraiser]),

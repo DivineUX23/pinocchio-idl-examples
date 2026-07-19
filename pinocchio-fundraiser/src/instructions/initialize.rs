@@ -33,6 +33,7 @@ use crate::{MIN_AMOUNT_TO_RAISE, state::Fundraiser};
 /// | `bump`           | u8   | 17     |
 #[p_instruction(
     id = 0,
+    inject,
     accounts = [
         maker(signer, mut),
         fundraiser(mut,

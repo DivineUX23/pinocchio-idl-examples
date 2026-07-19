@@ -11,6 +11,7 @@ use crate::state::Counter;
 
 #[p_instruction(
     id = 0,
+    inject,
     accounts = [
         authority(signer, mut),
         counter(mut,

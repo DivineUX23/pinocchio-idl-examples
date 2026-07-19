@@ -2,7 +2,7 @@ use pinocchio::{AccountView, Address, error::ProgramError};
 use pinocchio_idl_macros::p_state;
 
 /// On-chain state representation of an escrow campaign.
-#[p_state]
+#[p_state(inject)]
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Escrow {

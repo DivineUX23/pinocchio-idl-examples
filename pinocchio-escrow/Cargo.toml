@@ -13,7 +13,7 @@ pinocchio-token                     = "0.6.0"
 pinocchio-log                       = "0.5.1"
 pinocchio-pubkey = "0.3.0"
 pinocchio-associated-token-account  = "0.4.0"
-pinocchio-idl-macros                = "0.1.0"
+pinocchio-idl-macros                = "0.1.1"
 
 [dev-dependencies]
 litesvm                         = "0.12.0"

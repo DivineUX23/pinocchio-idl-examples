@@ -9,6 +9,7 @@ use crate::state::Escrow;
 
 #[p_instruction(
     id = 2,
+    inject,
     accounts = [
         maker(signer, mut),
         mint_a(relations = [escrow]),

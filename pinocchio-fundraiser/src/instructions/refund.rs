@@ -40,6 +40,7 @@ use crate::{
 /// | contributor_bump   | u8   | 1      |
 #[p_instruction(
     id = 3,
+    inject,
     accounts = [
         contributor(signer, mut),
         maker(),

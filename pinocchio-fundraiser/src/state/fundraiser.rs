@@ -6,7 +6,7 @@ use pinocchio_idl_macros::p_state;
 /// Derived via PDA: `["fundraiser", maker, bump]`.
 /// All multi-byte fields are stored in little-endian byte arrays to avoid
 /// alignment assumptions under `#[repr(C)]`.
-#[p_state]
+#[p_state(inject)]
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Fundraiser {

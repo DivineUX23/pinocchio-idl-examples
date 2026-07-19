@@ -4,7 +4,7 @@ use pinocchio_idl_macros::p_state;
 /// On-chain state tracking a user's counter.
 ///
 /// Derived via PDA: `["counter", authority, bump]`.
-#[p_state]
+#[p_state(inject)]
 #[repr(C)]
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Counter {
